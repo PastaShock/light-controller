@@ -1,20 +1,8 @@
 <head>
 <link rel=stylesheet type="text/css" href="style.css">
-<h1>Light controller</h1>
-<script>
-var switch = document.getElementById('lightswitch');
-function Switch() {
-	if (switch.value == 1) {
-		switch.value = 0;
-	} else {
-		switch.value = 1;
-	}
-	switch.style.display = 'none';
-	switch.style.display = 'block';
-}
-</script>
 </head>
 <body>
+<h1>Light controller</h1>
 <div class='title area'>
 	<p>Toggle the lights on and off:</p>
 </div>
@@ -27,4 +15,16 @@ function Switch() {
 </div>
 <button class="submit" id="phpButton">Submit</button>
 </form>
+<script>
+var switch = document.getElementById('lightswitch');
+function Switch() {
+	if (switch.value == 1) {
+		switch.value = 0;
+	} else {
+		switch.value = 1;
+	}
+	switch.style.display = 'none';
+	switch.style.display = 'block';
+}
+</script>
 </body>
