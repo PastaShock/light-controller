@@ -52,22 +52,22 @@ Serial.print("fadeOn() begin: ");
       if (R != 0) {
 //      Serial.print("R=");
 //      Serial.print(i);
-        ledcWrite(0,sinVal(i));
+//        ledcWrite(0,sinVal(i));
       }
       if (G != 0) {
 //      Serial.print(" G=");
 //      Serial.print(i);
-        ledcWrite(1,sinVal(i));
+//        ledcWrite(1,sinVal(i));
       }
       if (B != 0) {
 //      Serial.print(" B=");
 //      Serial.print(i);
-        ledcWrite(2,sinVal(i));
+//        ledcWrite(2,sinVal(i));
       }
       if (W != 0) {
 //      Serial.print(" W=");
 //      Serial.print(i);
-        ledcWrite(3,sinVal(i));
+//        ledcWrite(3,sinVal(i));
       }
 //      Serial.println("");
     delay(animationSpeed);
@@ -87,25 +87,25 @@ void fadeOff(byte R, byte G, byte B, byte W) {
   for (i == 255; i >= 0; i--) {
       if (R < prevR) {
         // sinVal needs to be called with 
-        ledcWrite(0,sinVal(i));
+//        ledcWrite(0,sinVal(i));
       }
 //      else if (R <= i) {
 //        return;
 //      }
       if (G < prevG) {
-        ledcWrite(1,sinVal(i));
+//        ledcWrite(1,sinVal(i));
       }
 //      else if (G <= i) {
 //        return;
 //      }
       if (B < prevB) {
-        ledcWrite(2,sinVal(i));
+//        ledcWrite(2,sinVal(i));
       }
 //      else if (B <= i) {
 //        return;
 //      }
       if (W < prevW) {
-        ledcWrite(3,sinVal(i));
+//        ledcWrite(3,sinVal(i));
       }
 //      else if (W <= i) {
 //        return;
@@ -179,15 +179,37 @@ class Desire {
     byte w;
 }
 
-void fade(desire, byte duration) {
-  
+void createObj(byte red, byte green, byte blue, byte white) {
+  Desire valuePack;
+  valuePack.r = red;
+  valuePack.g = green;
+  valuePack.b = blue;
+  valuePack.w = white;
+  return valuePack;
+}
+
+void getCurrentValues() {
+  Desire valuePack;
+  valuePack.r = analogRead(r);
+  valuePack.g = analogRead(g);
+  valuePack.b = analogRead(b);
+  valuePack.w = analogRead(w);
+  return valuePack;
+}
+
+void fade(currentValuesObj, desiredValuesObj) {
+  // this is where I need to break out the objects into "threads" where I will have current blue with desired blue_
+  // to send to the sinVal() to get a return
+  serial.print("this isn't working yet");
 }
 
 void processRecievedValue(char command) {
   if (command == '1') {
     fadeOn(255,255,255,255);
     //example call with pseudo changes
-    // fade({currentValuesObject}, {desiredValuesObject}, fadetime?)
+    // desiredValuesObj = createObj(255,255,255,255);
+    // currentValuesObj = getCurrentValues();
+    // fade({currentValuesObj}, {desiredValuesObj}, fadetime?);
   }
   else if (command == '0') {
     fadeOff(0,0,0,0);
