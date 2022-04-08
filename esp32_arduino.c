@@ -86,6 +86,7 @@ void fadeOff(byte R, byte G, byte B, byte W) {
   //fade off function currently sinusoidal
   for (i == 255; i >= 0; i--) {
       if (R < prevR) {
+        // sinVal needs to be called with 
         ledcWrite(0,sinVal(i));
       }
 //      else if (R <= i) {
@@ -139,16 +140,54 @@ void RGB(byte R, byte G, byte B, byte W) {
 //  Serial.println(B);
 }
 
-int sinVal(byte) {
+// explanation of logic
+// input is the increment variable from animation loop
+// desiredValue is the end value of the animation (user requested)
+// startingValue is the current value (before the fade starts)
+// using math.h, we call cos()
+// given that our minimum value is never less than zero
+// given our maximum value is never more than 255
+// and our animation should run for a length of 255 frames
+// I need to model a sin (or cos) wave that will meet and not exceed those parameters.
+// My sine wave needs also to be transformed by my input values:
+// input is our x value on a graph
+// pi: rounded to six decimal places
+// 25.8369: a mystery number I found while guessing how to fit a cosine wave into a 0-255 duration evenly
+// I wasn't able to find any information about this number on the internet and I wasn't able to figure out how to get to this_
+// number with neat whole numbers.
+// amplitude:
+// amplitude should be based on the delta of startingValue - desiredValue
+// that value is then divided by two. this should change the amplitude to reflect the change between given values.
+// if sv=0 and dv=255, a=-127.5, giving us a curve from 0,0 to 127.5,127.5 to 255,255
+// translation:
+// vertical translation should be based on (startingValue + desiredValue) / 2
+// this ensures that our minimum values for the curve never reach below zero and our maximum never reaches past 255
+// that is to say, if both values were 0 then t=0 and if both are 255 t=255. ex: 0,50 to 127,89.754 to 255,130
+int sinVal(const byte input, const byte startingValue, const byte desiredValue) {
   //calculate the sine wave transformation for the fade and or fade out functions.
   const double pi = 3.141596;
-  short s = sin((( i / pi ) / 25.8369 ) - ( pi / 2 ) ) * 127.5 + 127.5;
+  const byte delta = startingValue - desiredValue;
+  short s = cos((( input / pi ) / 25.8369 ) - ( pi / 2 ) ) * ( delta / 2 ) + ( ( startingValue + desiredValue ) / 2 );
   return s;
+}
+
+class Desire {
+  public:
+    byte r;
+    byte g;
+    byte b;
+    byte w;
+}
+
+void fade(desire, byte duration) {
+  
 }
 
 void processRecievedValue(char command) {
   if (command == '1') {
     fadeOn(255,255,255,255);
+    //example call with pseudo changes
+    // fade({currentValuesObject}, {desiredValuesObject}, fadetime?)
   }
   else if (command == '0') {
     fadeOff(0,0,0,0);
